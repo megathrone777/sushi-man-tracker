@@ -6,7 +6,9 @@ import { Content } from "./Content";
 const Map: React.FC = () => (
   <ReactMap
     attributionControl={false}
-    interactive={false}
+    dragPan={false}
+    dragRotate={false}
+    touchZoomRotate
     initialViewState={{
       latitude: 50.073658,
       longitude: 14.41854,
