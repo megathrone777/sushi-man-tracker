@@ -28,6 +28,7 @@ const Content: React.FC = () => {
         lat: latitude,
         lon: longitude,
       });
+      map.setZoom(16);
     }
   };
 
