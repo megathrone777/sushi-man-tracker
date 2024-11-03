@@ -37,7 +37,7 @@ const Content: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Marker {...{ latitude, longitude }} anchor="center">
+      <Marker anchor="center" latitude={latitude} longitude={longitude}>
         <StyledMarker />
       </Marker>
     </React.Fragment>
