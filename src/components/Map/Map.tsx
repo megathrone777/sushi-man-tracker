@@ -1,14 +1,14 @@
 import React from "react";
 import ReactMap from "react-map-gl/maplibre";
 
-import { Content } from "./Content";
+import { Overlay } from "./Overlay";
 
 const Map: React.FC = () => (
   <ReactMap
     attributionControl={false}
     dragPan={false}
     dragRotate={false}
-    touchZoomRotate
+    keyboard={false}
     initialViewState={{
       latitude: 50.073658,
       longitude: 14.41854,
@@ -17,7 +17,7 @@ const Map: React.FC = () => (
     mapStyle="/map.json"
     maplibreLogo={false}
   >
-    <Content />
+    <Overlay />
   </ReactMap>
 );
 
