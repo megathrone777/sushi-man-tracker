@@ -6,13 +6,11 @@ import { Overlay } from "./Overlay";
 const Map: React.FC = () => (
   <ReactMap
     attributionControl={false}
-    dragPan={false}
-    dragRotate={false}
     keyboard={false}
     initialViewState={{
-      latitude: 50.073658,
-      longitude: 14.41854,
-      zoom: 16,
+      latitude: 50.0938417,
+      longitude: 14.4424,
+      zoom: window.innerWidth > 1000 ? 14 : 12,
     }}
     mapStyle="/map.json"
     maplibreLogo={false}
