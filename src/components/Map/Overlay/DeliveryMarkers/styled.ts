@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 
 export const StyledMarker = styled.i({
+  backgroundColor: "#272727",
   color: "white",
   display: "inline-block",
   height: 25,
@@ -20,15 +21,15 @@ export const StyledMarker = styled.i({
   },
 
   "&.started": {
-    backgroundColor: "blue",
+    backgroundColor: "#3f5cc7",
   },
 
   "&.ready": {
-    backgroundColor: "green",
+    backgroundColor: "#21a235",
   },
 
   "&.took": {
-    backgroundColor: "yellowgreen",
+    backgroundColor: "#edaa1a",
   },
 
   "&.placed, &.done": {

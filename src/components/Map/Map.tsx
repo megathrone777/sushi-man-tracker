@@ -10,7 +10,7 @@ const Map: React.FC = () => (
     initialViewState={{
       latitude: 50.0938417,
       longitude: 14.4424,
-      zoom: window.innerWidth > 1000 ? 14 : 12,
+      zoom: window.innerWidth > 1000 ? 14 : 11,
     }}
     mapStyle="/map.json"
     maplibreLogo={false}

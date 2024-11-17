@@ -66,6 +66,8 @@ const DeliveryMarkers: React.FC = () => {
       if (response && response.data && response.data.data) {
         const items = response.data.data;
 
+        console.log(items);
+
         if (items && !!items.length) {
           const orders = items.map(
             ({
@@ -123,7 +125,7 @@ const DeliveryMarkers: React.FC = () => {
           ({ deliveryTime, id, key, position, status }): React.ReactElement => {
             return (
               <Marker
-                key={`delivery-marker-${id}`}
+                key={`delivery-marker-${Math.random()}`}
                 latitude={+position[0]}
                 longitude={+position[1]}
               >
