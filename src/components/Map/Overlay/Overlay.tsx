@@ -1,16 +1,13 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
-import { useMap, Marker } from "react-map-gl/maplibre";
+import { Marker } from "react-map-gl/maplibre";
 
-import { socket } from "~/socket";
-// import { Controls } from "./Controls";
-// import type { TCourierState } from "./types";
+import { socketPrimary } from "~/socket";
+import type { TCourier, TCourierState } from "./types";
+import { DeliveryMarkers } from "./DeliveryMarkers";
 import { StyledMarker } from "./styled";
 
 const Overlay: React.FC = () => {
-  const { current: map } = useMap();
-  const [courierState, setCourierState] = useState({
+  const [courierState, setCourierState] = useState<TCourierState>({
     "courier-1": {
       latitude: 0,
       longitude: 0,
@@ -25,38 +22,28 @@ const Overlay: React.FC = () => {
     courier: currentCourier,
     latitude,
     longitude,
-  }): void => {
-    if (map) {
-      setCourierState((prevState) => ({
+  }: TCourier): void => {
+    setCourierState(
+      (prevState: TCourierState): TCourierState => ({
         ...prevState,
         [`courier-${currentCourier}`]: {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           ...prevState[`courier-${currentCourier}`],
           latitude,
           longitude,
         },
-      }));
-    }
+      })
+    );
   };
 
-  // const handleCourierToggle = (id: number): void => {
-  //   setCourierState(
-  //     (prevState: TCourier): TCourier => ({
-  //       ...prevState,
-  //       courier: id,
-  //     })
-  //   );
-  // };
-
   useEffect((): void => {
-    // socket.off("change-location");
-    socket.on("change-location", handleLocationChange);
+    socketPrimary.on("change-location", handleLocationChange);
   }, []);
-
-  // <StyledMarker className={courier === 2 ? "secondary" : ""} />
 
   return (
     <React.Fragment>
-      {/* <Controls id={courier} onToggle={handleCourierToggle} /> */}
+      <DeliveryMarkers />
 
       <Marker
         anchor="center"
