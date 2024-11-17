@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { CapacitorHttp, type HttpHeaders } from "@capacitor/core";
 import { Marker } from "react-map-gl/maplibre";
 
 import { socketPrimary, socketSecondary } from "~/socket";
 import { StyledMarker } from "./styled";
 
-const headers = {
+const headers: HttpHeaders = {
   authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
 };
 
-const headers2 = {
+const headers2: HttpHeaders = {
   authorization: `Bearer ${import.meta.env.VITE_API_TOKEN2}`,
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
@@ -24,8 +25,9 @@ const DeliveryMarkers: React.FC = () => {
     const getOrders = async (): Promise<void> => {
       const date = moment().format("YYYY-MM-DD");
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/orders?${new URLSearchParams({
+      const response = await CapacitorHttp.get({
+        headers,
+        url: `${import.meta.env.VITE_API_URL}/api/orders?${new URLSearchParams({
           "populate[items][populate]": "product",
           "populate[items][populate][0]": "modification",
           "populate[items][populate][1]": "modification.modifier",
@@ -39,36 +41,33 @@ const DeliveryMarkers: React.FC = () => {
           "filters[$and][0][status][$nei]": "done",
           "filters[$and][1][status][$nei]": "placed",
         })}`,
-        {
-          headers,
-        }
-      );
+      });
 
-      const response2 = await fetch(
-        `${import.meta.env.VITE_API_URL2}/api/orders?${new URLSearchParams({
-          "populate[items][populate]": "product",
-          "populate[items][populate][0]": "modification",
-          "populate[items][populate][1]": "modification.modifier",
-          "populate[items][populate][2]": "modification.submodifier",
-          "populate[client][populate][0]": "orders",
-          "populate[timeReports]": "*",
-          "populate[additionals][populate]": "*",
-          "sort[0]": "createdAt:desc",
-          "filters[createdAt][$containsi]": date,
-          "filters[$or][1][deliveryType][$contains]": "delivery",
-          "filters[$and][0][status][$nei]": "done",
-          "filters[$and][1][status][$nei]": "placed",
-        })}`,
-        {
-          headers: headers2,
-        }
-      );
+      const response2 = await CapacitorHttp.get({
+        headers: headers2,
+        url: `${import.meta.env.VITE_API_URL2}/api/orders?${new URLSearchParams(
+          {
+            "populate[items][populate]": "product",
+            "populate[items][populate][0]": "modification",
+            "populate[items][populate][1]": "modification.modifier",
+            "populate[items][populate][2]": "modification.submodifier",
+            "populate[client][populate][0]": "orders",
+            "populate[timeReports]": "*",
+            "populate[additionals][populate]": "*",
+            "sort[0]": "createdAt:desc",
+            "filters[createdAt][$containsi]": date,
+            "filters[$or][1][deliveryType][$contains]": "delivery",
+            "filters[$and][0][status][$nei]": "done",
+            "filters[$and][1][status][$nei]": "placed",
+          }
+        )}`,
+      });
 
-      if (response && response.ok) {
-        const items = await response.json();
+      if (response && response.data && response.data.data) {
+        const items = response.data.data;
 
-        if (items && items.data) {
-          const orders = items.data.map(
+        if (items && !!items.length) {
+          const orders = items.map(
             ({
               attributes: { deliveryCoordinates, deliveryTime, status },
               id,
@@ -85,11 +84,11 @@ const DeliveryMarkers: React.FC = () => {
         }
       }
 
-      if (response2 && response2.ok) {
-        const items = await response2.json();
+      if (response2 && response2.data && response2.data.data) {
+        const items = response2.data.data;
 
-        if (items && items.data) {
-          const orders = items.data.map(
+        if (items && !!items.length) {
+          const orders = items.map(
             ({
               attributes: { deliveryCoordinates, deliveryTime, status },
               id,
