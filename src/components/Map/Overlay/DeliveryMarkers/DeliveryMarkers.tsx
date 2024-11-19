@@ -71,12 +71,20 @@ const DeliveryMarkers: React.FC = () => {
         if (items && !!items.length) {
           const orders = items.map(
             ({
-              attributes: { deliveryCoordinates, deliveryTime, status },
+              attributes: {
+                deliveryCoordinates,
+                deliveryTime,
+                onlinePaymentStatus,
+                paymentType,
+                status,
+              },
               id,
             }: TOrder) => ({
               deliveryTime,
               id,
               key: "sushi",
+              onlinePaymentStatus,
+              paymentType,
               position: deliveryCoordinates.split(","),
               status,
             })
@@ -92,12 +100,20 @@ const DeliveryMarkers: React.FC = () => {
         if (items && !!items.length) {
           const orders = items.map(
             ({
-              attributes: { deliveryCoordinates, deliveryTime, status },
+              attributes: {
+                deliveryCoordinates,
+                deliveryTime,
+                status,
+                onlinePaymentStatus,
+                paymentType,
+              },
               id,
             }: TOrder) => ({
               deliveryTime,
               id,
               key: "wings",
+              onlinePaymentStatus,
+              paymentType,
               position: deliveryCoordinates.split(","),
               status,
             })
@@ -121,26 +137,39 @@ const DeliveryMarkers: React.FC = () => {
     <React.Fragment>
       {orders &&
         !!orders.length &&
-        orders.map(
-          ({ deliveryTime, id, key, position, status }): React.ReactElement => {
-            return (
-              <Marker
-                key={`delivery-marker-${Math.random()}`}
-                latitude={+position[0]}
-                longitude={+position[1]}
-              >
-                <StyledMarker
-                  className={
-                    status === "new" && deliveryTime ? "new time" : status
-                  }
-                  style={{ borderRadius: key === "wings" ? 0 : "50%" }}
+        orders
+          .filter(
+            ({ onlinePaymentStatus, paymentType }) =>
+              (paymentType === "card" && onlinePaymentStatus === "PAID") ||
+              paymentType === "cardAfterDelivery" ||
+              paymentType === "cash"
+          )
+          .map(
+            ({
+              deliveryTime,
+              id,
+              key,
+              position,
+              status,
+            }): React.ReactElement => {
+              return (
+                <Marker
+                  key={`delivery-marker-${Math.random()}`}
+                  latitude={+position[0]}
+                  longitude={+position[1]}
                 >
-                  {id}
-                </StyledMarker>
-              </Marker>
-            );
-          }
-        )}
+                  <StyledMarker
+                    className={
+                      status === "new" && deliveryTime ? "new time" : status
+                    }
+                    style={{ borderRadius: key === "wings" ? 0 : "50%" }}
+                  >
+                    {id}
+                  </StyledMarker>
+                </Marker>
+              );
+            }
+          )}
     </React.Fragment>
   );
 };
