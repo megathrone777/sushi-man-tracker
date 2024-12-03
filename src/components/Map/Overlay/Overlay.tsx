@@ -43,12 +43,11 @@ const Overlay: React.FC = () => {
 
   return (
     <React.Fragment>
-      <DeliveryMarkers />
-
       <Marker
         anchor="center"
         latitude={courierState["courier-1"].latitude}
         longitude={courierState["courier-1"].longitude}
+        style={{ zIndex: 3000 }}
       >
         <StyledMarker>1</StyledMarker>
       </Marker>
@@ -57,10 +56,12 @@ const Overlay: React.FC = () => {
         anchor="center"
         latitude={courierState["courier-2"].latitude}
         longitude={courierState["courier-2"].longitude}
+        style={{ zIndex: 3000 }}
       >
         <StyledMarker className="secondary">2</StyledMarker>
       </Marker>
 
+      <DeliveryMarkers />
       <Marker latitude={50.0861328} longitude={14.4518119} />
       <Marker latitude={50.0993822} longitude={14.4309572} />
     </React.Fragment>

@@ -7,6 +7,7 @@ const Map: React.FC = () => (
   <ReactMap
     attributionControl={false}
     keyboard={false}
+    crossSourceCollisions
     initialViewState={{
       latitude: 50.0938417,
       longitude: 14.4424,
